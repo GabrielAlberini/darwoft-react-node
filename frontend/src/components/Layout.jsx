@@ -1,10 +1,14 @@
+import { Link } from "react-router-dom"
+
 const Layout = ({ children }) => {
   return (
     <>
       <header>
         <ul>
-          <li>Home</li>
-          <li>Contacto</li>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/dashboard">Dashboard</Link></li>
+          <li><Link to="/login">Login</Link></li>
+          <li><Link to="/register">Register</Link></li>
         </ul>
       </header>
       <main>{children}</main>
