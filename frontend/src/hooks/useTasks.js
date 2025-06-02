@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from "react"
 import { createTask, deleteTasks, getTasks, updateTask } from "../services/api"
+import { useAuth } from "../context/authContext"
+// import { createTask, deleteTasks, getTasks, updateTask } from "@/services/api"
 
 const useTasks = () => {
   const [tasks, setTasks] = useState([])
@@ -8,13 +10,13 @@ const useTasks = () => {
   const [isListening, setIsListening] = useState(false)
   const recognitionRef = useRef(null)
 
-  const USER_ID = "123"
+  const { token } = useAuth()
 
   useEffect(() => {
     const fetchingTasks = async () => {
       setLoader(true)
       try {
-        const tasks = await getTasks(USER_ID)
+        const tasks = await getTasks(token)
         setTasks(tasks)
       } catch (error) {
         setError("Error al recuperar las tareas")

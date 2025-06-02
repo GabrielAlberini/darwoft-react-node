@@ -1,0 +1,22 @@
+{
+  "tasks": {
+    "data": [
+      {
+        "id": "663c4f87a1e8eaa82c0ec3c1",
+        "text": "Comprar verduras",
+        "completed": false,
+        "userId": "123",
+        "createdAt": "2024-05-10T10:00:00.000Z",
+        "updatedAt": "2024-05-10T10:00:00.000Z"
+      },
+      {
+        "id": "663c4f87a1e8eaa82c0ec3c2",
+        "text": "Comprar pan",
+        "completed": false,
+        "userId": "123",
+        "createdAt": "2024-05-10T10:00:00.000Z",
+        "updatedAt": "2024-05-10T10:00:00.000Z"
+      }
+    ]
+  }
+}
