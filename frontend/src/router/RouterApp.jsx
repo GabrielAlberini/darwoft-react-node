@@ -15,15 +15,15 @@ const RouterApp = () => {
           <Home />
         </PrivateRoute>}>
         </Route>
-        <Route path="/dashboard" element={<PrivateRoute>
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="ajustes" element={<Ajustes />} />
-          </Route>
-        </PrivateRoute>}>
+        <Route path="/dashboard" element={
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        }>
+          <Route path="ajustes" element={<Ajustes />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* /dashboard/ajustes */}
         <Route path="*" element={<h2>Página no encontrada...</h2>} />
       </Routes>
     </BrowserRouter>
