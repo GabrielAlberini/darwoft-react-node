@@ -2,7 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import { authRouter, protect } from "./auth.js"
-import { tasksRouter } from './tasks.js'
+import { tasksRouter } from './tasksUserId.js'
 
 // Configuración inicial
 const app = express()
