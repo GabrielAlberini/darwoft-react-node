@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 import { createTask, deleteTasks, getTasks, updateTask } from "../services/api"
 import { useAuth } from "../context/authContext"
-// import { createTask, deleteTasks, getTasks, updateTask } from "@/services/api"
 
 const useTasks = () => {
   const [tasks, setTasks] = useState([])
@@ -25,8 +24,8 @@ const useTasks = () => {
       }
     }
 
-    fetchingTasks()
-  }, [])
+    if (token) fetchingTasks()
+  }, [token])
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
@@ -35,7 +34,7 @@ const useTasks = () => {
 
     recognition.lang = "es-AR"
     recognition.continuous = true
-    recognition.intermResults = false
+    recognition.interimResults = false
 
     recognition.onresult = (event) => {
       const transcript = event.results[event.results.length - 1][0].transcript.trim()
@@ -46,36 +45,40 @@ const useTasks = () => {
   }, [])
 
   const toggleListening = () => {
-    isListening ? recognitionRef.current.stop() : recognitionRef.current.start()
+    if (isListening) {
+      recognitionRef.current.stop()
+    } else {
+      recognitionRef.current.start()
+    }
     setIsListening(!isListening)
   }
 
   const addTask = async (text) => {
     try {
-      const data = await createTask(text, USER_ID)
+      const data = await createTask(text, token)
       setTasks(prev => [data, ...prev])
     } catch (error) {
-      console.log(error.message)
+      console.error(error.message)
     }
   }
 
   const handleDelete = async (id) => {
     try {
-      if (confirm("¡Esta seguro que quieres borrar esta tarea?")) {
-        await deleteTasks(id, USER_ID)
+      if (confirm("¿Estás seguro de que quieres borrar esta tarea?")) {
+        await deleteTasks(id, token)
         setTasks(tasks.filter(t => t._id !== id))
       }
     } catch (error) {
-      console.log(error.message)
+      console.error(error.message)
     }
   }
 
   const handleComplete = async ({ _id, completed }) => {
     try {
-      const data = await updateTask(_id, completed, USER_ID)
-      setTasks(tasks.map(t => t._id === _id ? data : t))
+      const data = await updateTask(_id, completed, token)
+      setTasks(tasks.map(t => (t._id === _id ? data : t)))
     } catch (error) {
-      console.log(error.message)
+      console.error(error.message)
       setError(error.message)
     }
   }

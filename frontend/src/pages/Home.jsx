@@ -24,8 +24,11 @@ const Home = () => {
         <ul>
           {
             tasks.map((task) => (
-              <li key={task._id}>{task.text}
-                <button onClick={() => handleComplete(task)}>{task.completed ? "No completado" : "Realizada"}</button>
+              <li key={task._id}>
+                {task.text}
+                <button onClick={() => handleComplete(task)}>
+                  {task.completed ? "No completado" : "Realizada"}
+                </button>
                 <button onClick={() => handleDelete(task._id)}>Borrar</button>
               </li>
             ))

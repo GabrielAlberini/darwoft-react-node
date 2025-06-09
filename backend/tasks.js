@@ -43,11 +43,21 @@ tasksRouter.post('/', async (req, res) => {
 tasksRouter.patch('/:id', async (req, res) => {
   const { completed } = req.body
   const userId = req.user.id
-  if (!userId) return res.status(400).json({ success: false, message: 'Falta userId' })
+
+  if (typeof completed !== 'boolean') {
+    return res.status(400).json({ success: false, message: 'El campo completed debe ser booleano' })
+  }
 
   try {
-    const task = await Task.findByIdAndUpdate(req.params.id, { completed, userId }, { new: true })
-    if (!task) return res.status(404).json({ success: false, message: 'Tarea no encontrada' })
+    const task = await Task.findOneAndUpdate(
+      { _id: req.params.id, userId },
+      { completed },
+      { new: true }
+    )
+
+    if (!task) {
+      return res.status(404).json({ success: false, message: 'Tarea no encontrada' })
+    }
 
     res.json({ success: true, data: task })
   } catch (error) {

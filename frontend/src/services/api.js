@@ -1,7 +1,9 @@
 // const API_URL = import.meta.env.VITE_API_URL
 const NODE_DEV = import.meta.env.VITE_NODE_DEV ?? "development"
 
-const API_URL = NODE_DEV === "production" ? import.meta.env.VITE_BASE_API_URL : "http://localhost:2222/tasks"
+const API_URL = NODE_DEV === "production"
+  ? import.meta.env.VITE_BASE_API_URL
+  : "http://localhost:2222/api/tasks"
 
 const getTasks = async (token) => {
   const response = await fetch(`${API_URL}/tasks`, {
@@ -13,29 +15,51 @@ const getTasks = async (token) => {
   return data.data
 }
 
-const createTask = async (text, userId) => {
-  const res = await fetch(API_URL, {
+const createTask = async (text, token) => {
+  const res = await fetch(`${API_URL}/tasks`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text, userId })
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ text })
   })
+
   const data = await res.json()
+
+  if (!res.ok) {
+    throw new Error(data.message || "Error al crear la tarea")
+  }
+
   return data.data
 }
 
-const deleteTasks = async (id, userId) => {
-  await fetch(`${API_URL}/${id}?userId=${userId}`, {
-    method: "DELETE"
+
+const deleteTasks = async (id, token) => {
+  await fetch(`${API_URL}/tasks/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   })
 }
 
-const updateTask = async (id, completed, userId) => {
-  const res = await fetch(`${API_URL}/${id}`, {
+const updateTask = async (id, completed, token) => {
+  const res = await fetch(`${API_URL}/tasks/${id}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ completed: !completed, userId })
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ completed: !completed })
   })
+
   const data = await res.json()
+
+  if (!res.ok) {
+    throw new Error(data.message || "Error al actualizar la tarea")
+  }
+
   return data.data
 }
 
